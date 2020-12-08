@@ -52,11 +52,16 @@ class EmployeesTable extends Table
             'foreignKey' => 'emp_no',
         ]);
         
+        // Table departments
         $this->belongsToMany('Departments',[
             'joinTable' => 'dept_emp',
             'foreignKey' => 'emp_no',
             'bindingKey' => 'emp_no',
         ]);
+
+        // Table Employees
+        $this->belongsTo('Dept_mananger')
+            ->setForeignKey('emp_no');
     }
 
     /**

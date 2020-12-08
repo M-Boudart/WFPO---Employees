@@ -45,19 +45,19 @@ class EmployeesController extends AppController
     public function view($id = null)
     {
         $employee = $this->Employees->get($id, [
-            'contain' => ['salaries','titles'],
+            // 'contain' => ['salaries','titles'],
         ]);
         
-        $titles = $employee->titles;
-        $today = new \DateTime();
-        foreach($titles as $title) {
-            $date = new \DateTime($title->to_date->format('Y-m-d'));
+        // $titles = $employee->titles;
+        // $today = new \DateTime();
+        // foreach($titles as $title) {
+        //     $date = new \DateTime($title->to_date->format('Y-m-d'));
             
-            if($date > $today) {
-                $employee->fonction = $title->title;
-                break;
-            }
-        }
+        //     if($date > $today) {
+        //         $employee->fonction = $title->title;
+        //         break;
+        //     }
+        // }
 
         $this->set(compact('employee'));
     }

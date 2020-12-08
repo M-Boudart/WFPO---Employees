@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Controller\Controller;
+use Cake\ORM\Query;
+
 /**
  * Departments Controller
  *
@@ -18,9 +21,33 @@ class DepartmentsController extends AppController
      */
     public function index()
     {
+        // Récupération des départements et du contenu de la talbe "dept_manager" en lien avec le département
+        $departments = $this->Departments->find('all', ['contain' => ['Dept_manager']]);
+
+        foreach($departments as $department) {
+            $dept_no = $department['dept_no'];
+
+            // Récupération de l'entité du manager (c-a-d celui avec le champ "to_date" plus grand que la date actuelle)
+            $manager = $this->Departments->Dept_manager->find()->select('emp_no')
+                ->where([
+                    'to_date >' => '2020/12/08',
+                    'dept_no' => $dept_no
+                ])
+                ->toArray();
+
+            // Récupération du numéro d'employé du manager
+            $emp_no = $manager[0]['emp_no'];
+
+            // Récupération de "l'entité image" du manager
+            $picture = $this->Departments->Employees->find()->select(['emp_no', 'picture'])->where(['emp_no' => $emp_no])->toArray();
+            
+            // Création du tableau contenant les managers (leur image et numéro d'employé)
+            $managers[$dept_no] = ['emp_no' => $picture[0]['emp_no'], 'picture' => $picture[0]['picture']];
+        }
         $departments = $this->paginate($this->Departments);
 
         $this->set(compact('departments'));
+        $this->set(compact('managers'));
     }
 
     /**
@@ -35,7 +62,7 @@ class DepartmentsController extends AppController
         $department = $this->Departments->get($id, [
             'contain' => [],
         ]);
-
+        
         $this->set(compact('department'));
     }
 

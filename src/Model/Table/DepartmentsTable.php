@@ -46,6 +46,10 @@ class DepartmentsTable extends Table
             'foreignKey' => 'dept_no',
             'bindingKey' => 'dept_no',
         ]);
+
+        $this->hasMany('Dept_manager')
+            ->setForeignKey(['dept_no'])
+            ->setBindingKey(['dept_no']);
     }
 
     /**

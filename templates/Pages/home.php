@@ -44,6 +44,7 @@ $cakeDescription = 'CakePHP: the rapid development PHP framework';
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
 
     <?= $this->Html->css(['normalize.min', 'milligram.min', 'cake', 'home']) ?>
+    <?= $this->Html->css(["https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"]) ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
@@ -68,6 +69,9 @@ $cakeDescription = 'CakePHP: the rapid development PHP framework';
                         <div class="message default text-center">
                             <small>Please be aware that this page will not be shown if you turn off debug mode unless you replace templates/Pages/home.php with your own version.</small>
                         </div>
+                        <div class="alert alert-primary" role="alert">
+  A simple primary alert—check it out!
+</div>
                         <!-- <div id="url-rewriting-warning" class="alert url-rewriting">
                             <ul>
                                 <li class="bullet problem">
@@ -215,5 +219,7 @@ $cakeDescription = 'CakePHP: the rapid development PHP framework';
             </div>
         </div>
     </main>
+    <?= $this->Html->script(['https://code.jquery.com/jquery-3.5.1.slim.min.js']); ?>
+    <?= $this->Html->script(['https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js']); ?>
 </body>
 </html>

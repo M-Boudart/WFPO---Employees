@@ -43,10 +43,22 @@ class DepartmentsController extends AppController
             
             // Création du tableau contenant les managers (leur image et numéro d'employé)
             $managers[$dept_no] = ['emp_no' => $picture[0]['emp_no'], 'picture' => $picture[0]['picture']];
-
+            
+            // Nombre d'employés par département
             $nbEmployees = $this->Departments->Dept_emp->find()->where(['dept_no' => $dept_no])->count();
 
             $employeesNumber[$dept_no] = $nbEmployees;
+
+            // Nombre de postes vacants par département
+            $query = $this->Departments->Vacancies->find()->where(['dept_no' => $dept_no]);
+
+            $nbPosteVacant = 0;
+            foreach($query as $posteVacant) {
+                $nbPosteVacant += $posteVacant['quantity'];
+            }
+            
+            $postesVacants[$dept_no] = $nbPosteVacant;
+            
         }
 
         $departments = $this->paginate($this->Departments);
@@ -54,6 +66,8 @@ class DepartmentsController extends AppController
         $this->set(compact('departments'));
         $this->set(compact('managers'));
         $this->set(compact('employeesNumber'));
+        $this->set(compact('postesVacants'));
+        $this->set(compact('postesVacants'));
     }
 
     /**

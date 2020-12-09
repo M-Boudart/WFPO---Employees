@@ -18,6 +18,9 @@ class TitlesController extends AppController
      */
     public function index()
     {
+        $this->paginate = [
+            'contain' => ['employees'],
+        ];
         $titles = $this->paginate($this->Titles);
 
         $this->set(compact('titles'));
@@ -33,7 +36,7 @@ class TitlesController extends AppController
     public function view($id = null)
     {
         $title = $this->Titles->get($id, [
-            'contain' => [],
+            'contain' => ['employees'],
         ]);
 
         $this->set(compact('title'));
@@ -56,7 +59,8 @@ class TitlesController extends AppController
             }
             $this->Flash->error(__('The title could not be saved. Please, try again.'));
         }
-        $this->set(compact('title'));
+        $employees = $this->Titles->employees->find('list', ['limit' => 200]);
+        $this->set(compact('title', 'employees'));
     }
 
     /**
@@ -80,7 +84,8 @@ class TitlesController extends AppController
             }
             $this->Flash->error(__('The title could not be saved. Please, try again.'));
         }
-        $this->set(compact('title'));
+        $employees = $this->Titles->employees->find('list', ['limit' => 200]);
+        $this->set(compact('title', 'employees'));
     }
 
     /**

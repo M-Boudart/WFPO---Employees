@@ -22,7 +22,8 @@
             <fieldset>
                 <legend><?= __('Edit Title') ?></legend>
                 <?php
-                    echo $this->Form->control('to_date', ['empty' => true]);
+                    echo $this->Form->control('title_no');
+                    echo $this->Form->control('description');
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

@@ -40,9 +40,11 @@ class TitlesTable extends Table
         $this->setTable('titles');
         $this->setDisplayField('title');
         $this->setPrimaryKey(['emp_no', 'title', 'from_date']);
-        
-        $this->belongsTo('employees', [
-            'foreignKey' => 'emp_no',
+
+        $this->belongsToMany('Vacancies', [
+            'joinTable' => 'vacancies',
+            'foreignKey' => 'title_no',
+            'bindingKey' => 'title_no',
         ]);
     }
 
@@ -55,21 +57,20 @@ class TitlesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->integer('emp_no')
-            ->allowEmptyString('emp_no', null, 'create');
+            ->integer('title_no')
+            ->allowEmptyString('title_no', null, 'create');
 
         $validator
             ->scalar('title')
-            ->maxLength('title', 50)
-            ->allowEmptyString('title', null, 'create');
+            ->maxLength('title', 255)
+            ->requirePresence('title', 'create')
+            ->notEmptyString('title');
 
         $validator
-            ->date('from_date')
-            ->allowEmptyDate('from_date', null, 'create');
-
-        $validator
-            ->date('to_date')
-            ->allowEmptyDate('to_date');
+            ->scalar('description')
+            ->maxLength('description', 255)
+            ->requirePresence('description', 'create')
+            ->notEmptyString('description');
 
         return $validator;
     }

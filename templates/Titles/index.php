@@ -11,20 +11,18 @@
         <table>
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('emp_no') ?></th>
+                    <th><?= $this->Paginator->sort('title_no') ?></th>
                     <th><?= $this->Paginator->sort('title') ?></th>
-                    <th><?= $this->Paginator->sort('from_date') ?></th>
-                    <th><?= $this->Paginator->sort('to_date') ?></th>
+                    <th><?= $this->Paginator->sort('description') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($titles as $title): ?>
                 <tr>
-                    <td><?= $this->Number->format($title->emp_no) ?></td>
+                    <td><?= $this->Number->format($title->title_no) ?></td>
                     <td><?= h($title->title) ?></td>
-                    <td><?= h($title->from_date) ?></td>
-                    <td><?= h($title->to_date) ?></td>
+                    <td><?= h($title->description) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $title->emp_no]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $title->emp_no]) ?>

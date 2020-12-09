@@ -56,6 +56,12 @@ class DepartmentsTable extends Table
             'foreignKey' => 'dept_no',
             'bindingKey' => 'dept_no',
         ]);
+
+        $this->belongsToMany('Vacancies', [
+            'joinTable' => 'vacancies',
+            'foreignKey' => 'dept_no',
+            'bindingKey' => 'dept_no',
+        ]);
     }
 
     /**

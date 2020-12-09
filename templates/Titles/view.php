@@ -23,16 +23,12 @@
                     <td><?= h($title->title) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Emp No') ?></th>
-                    <td><?= $this->Number->format($title->emp_no) ?></td>
+                    <th><?= __('Description') ?></th>
+                    <td><?= h($title->description) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('From Date') ?></th>
-                    <td><?= h($title->from_date) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('To Date') ?></th>
-                    <td><?= h($title->to_date) ?></td>
+                    <th><?= __('Title No') ?></th>
+                    <td><?= $this->Number->format($title->title_no) ?></td>
                 </tr>
             </table>
         </div>

@@ -17,6 +17,7 @@
                     <th><?= $this->Paginator->sort('description') ?></th>
                     <th><?= __('Manager') ?></th>
                     <th><?= __('Nb employees') ?></th>
+                    <th><?= __('Postes à pourvoir') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                     
                 </tr>
@@ -34,6 +35,15 @@
                         'height' => 60
                     ]) ?></td>
                     <td><?= $employeesNumber[$department->dept_no]?></td>
+                    <td>
+                        <?= $postesVacants[$department->dept_no] ?>
+                        <?php if($postesVacants[$department->dept_no] > 0) : ?>
+                            <?= $this->Html->link(
+                                __('Apply'),
+                                ['controller' => 'vacancies', 'action' => 'displayJobsOffers', $department->dept_no],
+                            ) ?>
+                        <?php endif; ?>
+                    </td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $department->dept_no]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $department->dept_no]) ?>

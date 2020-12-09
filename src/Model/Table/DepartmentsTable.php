@@ -50,6 +50,12 @@ class DepartmentsTable extends Table
         $this->hasMany('Dept_manager')
             ->setForeignKey(['dept_no'])
             ->setBindingKey(['dept_no']);
+
+        $this->belongsToMany('Dept_emp', [
+            'joinTable' => 'dept_emp',
+            'foreignKey' => 'dept_no',
+            'bindingKey' => 'dept_no',
+        ]);
     }
 
     /**

@@ -43,11 +43,17 @@ class DepartmentsController extends AppController
             
             // Création du tableau contenant les managers (leur image et numéro d'employé)
             $managers[$dept_no] = ['emp_no' => $picture[0]['emp_no'], 'picture' => $picture[0]['picture']];
+
+            $nbEmployees = $this->Departments->Dept_emp->find()->where(['dept_no' => $dept_no])->count();
+
+            $employeesNumber[$dept_no] = $nbEmployees;
         }
+
         $departments = $this->paginate($this->Departments);
 
         $this->set(compact('departments'));
         $this->set(compact('managers'));
+        $this->set(compact('employeesNumber'));
     }
 
     /**

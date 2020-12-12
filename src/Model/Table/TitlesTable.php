@@ -41,7 +41,7 @@ class TitlesTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey(['emp_no', 'title', 'from_date']);
 
-        $this->belongsToMany('Vacancies', [
+        $this->hasMany('Vacancies', [
             'joinTable' => 'vacancies',
             'foreignKey' => 'title_no',
             'bindingKey' => 'title_no',

@@ -111,18 +111,9 @@ class VacanciesController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function displayJobsOffers(string $dept_no) {
-        $titles = $this->Vacancies->find()->where(['dept_no' => $dept_no])->toArray();
-
-        foreach($titles as $title) {
-            $title_no = $title['title_no'];
-            
-            $titleInfos[$title_no] = $this->Vacancies->Titles->find()->where(['title_no' => $title_no])->toArray();
-            
-            $titleInfos[$title_no]['quantity'] = $title['quantity'];
-        }
+        $vacancies = $this->Vacancies->find('all', ['contain' => 'Titles'])->where(['dept_no' => $dept_no]);
         
-        // Formatage à revoir
-        $this->set(compact('titleInfos'));
+        $this->set(compact('vacancies'));
         $this->set(compact('dept_no'));
     }
     /**

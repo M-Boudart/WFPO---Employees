@@ -47,7 +47,7 @@ class VacanciesTable extends Table
             'bindingKey' => 'dept_no',
         ]);
 
-        $this->belongsToMany('Titles', [
+        $this->hasMany('Titles', [
             'joinTable' => 'titles',
             'foreignKey' => 'title_no',
             'bindingKey' => 'title_no',

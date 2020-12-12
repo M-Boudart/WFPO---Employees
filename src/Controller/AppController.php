@@ -48,8 +48,10 @@ class AppController extends Controller
         $this->loadComponent('Flash');
 
         $cellMenu = $this->cell('Menu');
+        $cellPartners = $this->cell('Partners');
 
         $this->set(compact('cellMenu'));
+        $this->set(compact('cellPartners'));
         /*
          * Enable the following component for recommended CakePHP form protection settings.
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html

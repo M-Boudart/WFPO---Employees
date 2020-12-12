@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\View\CellTrait;
 
 /**
  * Application Controller
@@ -28,6 +29,8 @@ use Cake\Controller\Controller;
  */
 class AppController extends Controller
 {
+    use CellTrait;
+
     /**
      * Initialization hook method.
      *
@@ -44,6 +47,9 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
+        $cellMenu = $this->cell('Menu');
+
+        $this->set(compact('cellMenu'));
         /*
          * Enable the following component for recommended CakePHP form protection settings.
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html

@@ -54,6 +54,10 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+        
+        <div id="chart_div"></div>
+
+
     </div>
     <div class="paginator">
         <ul class="pagination">

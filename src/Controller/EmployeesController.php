@@ -72,7 +72,7 @@ class EmployeesController extends AppController
         //Récupérer => Créer
         $employee = $this->Employees->newEmptyEntity();
         
-        $employee->password = hash($pass);
+        // $employee->password = hash($pass);
         //Traitement
         //Rien faire en GET
         //Persister en POST

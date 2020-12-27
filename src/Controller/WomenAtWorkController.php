@@ -7,6 +7,7 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\ORM\Query;
 use App\Controller\PieChart;
+use Cake\View\CellTrait;
 /**
  * Departments Controller
  *
@@ -15,6 +16,7 @@ use App\Controller\PieChart;
  */
 class WomenAtWorkController extends AppController
 {
+    use CellTrait;
     /**
      * Index method
      *
@@ -23,6 +25,11 @@ class WomenAtWorkController extends AppController
     public function index()
     {
     
+        $cellWomenRatio = $this->cell('WomenRatio');
+        $cellWomenCourbe = $this->cell("WomenCourbe");
+
+        $this->set(compact('cellWomenRatio'));
+        $this->set(compact('cellWomenCourbe'));
        
 
     }

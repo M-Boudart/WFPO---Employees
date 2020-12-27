@@ -214,3 +214,18 @@ th {
         content: " \2190";
     }
 }
+
+/* CLASSE PERSO */
+
+.titreContent
+{
+    font-size: 40px;
+    
+}
+
+/* ID perso */
+#content
+{
+    font-size: 25px;
+}
+

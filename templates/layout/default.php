@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,6 +19,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -37,23 +39,30 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 
-    <!-- Google chart script , voir app controller -->
-    <?= $cellWomenRatio ?>
+
 </head>
+
 <body>
+    <header class="p-5" style="background-size: cover; background-position: center;">
+        <div class="mx-auto d-block text-center">
+            <?= $this->Html->image('style/deloitte.jpg', ['alt' => 'Logo compagny']); ?>
+        </div>
+    </header>
     <?= $cellMenu ?>
+
     <main class="main">
         <div class="container">
             <?= $this->Flash->render() ?>
             <?= $this->fetch('content') ?>
-            
+
         </div>
     </main>
     <footer>
     </footer>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-<?= $this->Html->script(['https://code.jquery.com/jquery-3.5.1.slim.min.js']); ?>
-<?= $this->Html->script(['https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js']); ?>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <?= $this->Html->script(['https://code.jquery.com/jquery-3.5.1.slim.min.js']); ?>
+    <?= $this->Html->script(['https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js']); ?>
 </body>
+
 </html>

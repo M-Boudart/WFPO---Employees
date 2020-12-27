@@ -31,6 +31,22 @@ class AppController extends Controller
 {
     use CellTrait;
 
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        // pour tous les contrôleurs de notre application, rendre les actions
+        // index et view publiques, en ignorant la vérification d'authentification
+        $this->Authentication->addUnauthenticatedActions(['index', 'view']);
+    }
+
+    public function beforeRender(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeRender($event);
+        $user = $this->Authentication->getIdentity();
+
+        $this->set(compact('user'));
+    }
+    
     /**
      * Initialization hook method.
      *
@@ -46,6 +62,7 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+        $this->loadComponent('Authentication.Authentication');
 
         $cellMenu = $this->cell('Menu');
         $cellPartners = $this->cell('Partners');

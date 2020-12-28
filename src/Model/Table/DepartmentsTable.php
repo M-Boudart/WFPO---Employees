@@ -55,6 +55,9 @@ class DepartmentsTable extends Table
             'joinTable' => 'dept_emp',
             'foreignKey' => 'dept_no',
             'bindingKey' => 'dept_no',
+            'conditions' => [
+                'to_date >' => date('Y-m-d'),
+            ],
         ]);
 
         $this->belongsToMany('Vacancies', [
@@ -83,6 +86,28 @@ class DepartmentsTable extends Table
             ->requirePresence('dept_name', 'create')
             ->notEmptyString('dept_name')
             ->add('dept_name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+
+        $validator
+            ->scalar('picture')
+            ->maxLength('picture', 255)
+            ->allowEmptyString('picture');
+
+        $validator
+            ->scalar('description')
+            ->maxLength('description', 255)
+            ->requirePresence('description', 'create')
+            ->allowEmptyString('description');
+
+        $validator
+            ->scalar('address')
+            ->maxLength('address', 255)
+            ->requirePresence('address', 'create')
+            ->allowEmptyString('address');
+
+        $validator
+            ->scalar('rules')
+            ->maxLength('rules', 255)
+            ->allowEmptyString('rules');
 
         return $validator;
     }

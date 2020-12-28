@@ -98,14 +98,23 @@ class EmployeesTable extends Table
             ->requirePresence('gender', 'create')
             ->notEmptyString('gender')
             ->add('gender', 'validValue',[
-                'rule' => ['inlist',['F','M']],
-                'message' => 'This value must be either F or M',
+                'rule' => ['inlist',['F','M', 'X']],
+                'message' => 'This value must be either F, M or X',
             ]);
 
         $validator
             ->date('hire_date')
             ->requirePresence('hire_date', 'create')
             ->notEmptyDate('hire_date');
+
+        $validator
+            ->scalar('picture')
+            ->maxLength('picture', 255)
+            ->requirePresence('picture', 'create');
+
+        $validator
+            ->sclar('email')
+            ->requirePresence('email', 'create');
 
         return $validator;
     }

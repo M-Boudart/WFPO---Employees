@@ -15,6 +15,14 @@ class EmployeesController extends AppController
 {
     use CellTrait;
     
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        // Configurez l'action de connexion pour ne pas exiger d'authentification,
+        // évitant ainsi le problème de la boucle de redirection infinie
+        $this->Authentication->addUnauthenticatedActions(['login', 'add', 'edit']);
+    }
+
     /**
      * Index method
      *
@@ -72,7 +80,6 @@ class EmployeesController extends AppController
         //Récupérer => Créer
         $employee = $this->Employees->newEmptyEntity();
         
-        // $employee->password = hash($pass);
         //Traitement
         //Rien faire en GET
         //Persister en POST
@@ -150,5 +157,37 @@ class EmployeesController extends AppController
         //Envoyer à la vue
         $this->set('employees',$employees);
         $this->render('index'); //Définit un temlate spécifique
+    }
+
+    public function login()
+    {
+        $this->request->allowMethod(['get', 'post']);
+        $result = $this->Authentication->getResult();
+        // indépendamment de POST ou GET, rediriger si l'utilisateur est connecté
+        if ($result->isValid()) {
+            // rediriger vers /articles après la connexion réussies
+            $redirect = $this->request->getQuery('redirect', [
+                'controller' => 'Employees',
+                'action' => 'index',
+            ]);
+
+            return $this->redirect($redirect);
+        }
+        
+        // afficher une erreur si l'utilisateur a soumis le formulaire
+        // et que l'authentification a échoué
+        if ($this->request->is('post') && !$result->isValid()) {
+            $this->Flash->error(__('Invalid username or password'));
+        }
+    }
+
+    public function logout()
+    {
+        $result = $this->Authentication->getResult();
+        // indépendamment de POST ou GET, rediriger si l'utilisateur est connecté
+        if ($result->isValid()) {
+            $this->Authentication->logout();
+            return $this->redirect(['action' => 'login']);
+        }
     }
 }

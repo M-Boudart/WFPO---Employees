@@ -49,6 +49,9 @@
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $department->dept_no]) ?>
                         <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $department->dept_no], ['confirm' => __('Are you sure you want to delete # {0}?', $department->dept_no)]) ?>
                     </td>
+                    <?php if (isset($dept_working) && $department->dept_no === $dept_working) : ?>
+                        <td><?= $this->Html->link(__("Department's rules"), "/roi/$department->rules") ?></td>
+                    <?php endif; ?>
                     
                 </tr>
                 <?php endforeach; ?>

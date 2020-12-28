@@ -23,7 +23,7 @@ class DepartmentsController extends AppController
     public function index()
     {
         // Récupération des départements et du contenu de la talbe "dept_manager" en lien avec le département
-        $departments = $this->Departments->find('all', ['contain' => ['Dept_manager']]);
+        $departments = $this->Departments->find();
 
         foreach ($departments as $department) {
             $dept_no = $department['dept_no'];
@@ -61,6 +61,21 @@ class DepartmentsController extends AppController
             $postesVacants[$dept_no] = $nbPosteVacant;
         }
 
+        // Gestion du ROI
+        $dept_working = null;
+        if ($this->Authentication->getIdentity() !== null) {
+            $user = $this->Authentication->getIdentity();
+
+            $query = $this->Departments->Dept_emp->find();
+
+            $dept_working = $query->select('dept_no')->where([
+                'emp_no' => $user->emp_no,
+                'to_date >' => date('Y-m-d'),
+            ])->first();
+            
+            $dept_working = $dept_working->dept_no;
+        }
+
         $departments = $this->paginate($this->Departments);
 
         $this->set(compact('departments'));
@@ -68,6 +83,7 @@ class DepartmentsController extends AppController
         $this->set(compact('employeesNumber'));
         $this->set(compact('postesVacants'));
         $this->set(compact('postesVacants'));
+        $this->set(compact('dept_working'));
     }
 
     /**

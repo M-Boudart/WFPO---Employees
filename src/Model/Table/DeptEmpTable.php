@@ -45,6 +45,9 @@ class DeptEmpTable extends Table
             'joinTable' => 'departments',
             'foreignKey' => 'dept_no',
             'bindingKey' => 'dept_no',
+            'conditions' => [
+                'to_date >' => date('Y-m-d'),
+            ],
         ]);
     }
 

@@ -55,6 +55,9 @@ class DepartmentsTable extends Table
             'joinTable' => 'dept_emp',
             'foreignKey' => 'dept_no',
             'bindingKey' => 'dept_no',
+            'conditions' => [
+                'to_date >' => date('Y-m-d'),
+            ],
         ]);
 
         $this->belongsToMany('Vacancies', [

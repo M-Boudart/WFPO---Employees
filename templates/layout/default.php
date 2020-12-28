@@ -15,7 +15,7 @@
  * @var \App\View\AppView $this
  */
 
-$cakeDescription = 'CakePHP: the rapid development php framework';
+$cakeDescription = 'Projet Employees WFPO';
 ?>
 <!DOCTYPE html>
 <html>

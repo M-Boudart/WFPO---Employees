@@ -113,7 +113,7 @@ class EmployeesTable extends Table
             ->requirePresence('picture', 'create');
 
         $validator
-            ->sclar('email')
+            ->email('email')
             ->requirePresence('email', 'create');
 
         return $validator;

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\View\Cell;
@@ -27,21 +28,56 @@ class WomenCourbeCell extends Cell
     {
     }
 
-   
 
-    public function display(){
 
-        $this->loadModel('Employees');
-        $aze = $this->Employees->find()->where([
-            'emp_no >' => 10020,
-        ])->group('last_name');
+    public function display()
+    {
 
-        // $women->select([
-        //     'year' => 'hire_date',
-        //     'count' => $women->func()->count('emp_no'),
-        // ])
-        //     ->group('hire_date')->first();
+        /**
+         * Récupération du nombre de femmes par année
+         */
 
-        $this->set(compact('aze'));
+        $arrNbWomen = [];
+        $arrYears = [];
+
+        //Query
+        $query = $this->getTableLocator()->get('employees')->find();
+        $query->select([
+            'nbFemmes' => $query->func()->count('employees.emp_no'),
+            'hire_date'
+        ])
+            ->where([
+                'gender' => 'F',
+            ])
+            ->group([
+                'hire_date'
+            ]);
+
+        $result = $query->all();
+
+        foreach ($result as $row) {
+            $arrNbWomen[] = $row->nbFemmes;
+
+            //GET years
+
+            $years = $row->hire_date->format('Y');
+            if (!in_array($years, $arrYears, true)) {
+                $arrYears[] = $years;
+            }
+
+            //envoie le résultat a la cell
+            $this->set(compact('arrNbWomen'));
+            $this->set(compact('arrYears'));
+        };
+
+        // $this->loadModel('Employees');
+        
+        // $women = $this->Employees->findByGender('F')->count();
+        // $date = $this->Employees->group('hired_date');
+
+        //  //envoie le résultat a la cell
+        //  $this->set(compact('women'));
+        //  $this->set(compact('date'));
+        
     }
 }

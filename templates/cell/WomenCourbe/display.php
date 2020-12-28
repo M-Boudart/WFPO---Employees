@@ -1,9 +1,8 @@
 <?php
 
-// foreach ($aze as $a) {
+$women = $arrNbWomen;
 
-//   dump($a);
-// }
+$years  = $arrYears;
 
 
 
@@ -17,13 +16,33 @@
   google.charts.setOnLoadCallback(drawChart);
 
   function drawChart() {
+
+
+
     var data = google.visualization.arrayToDataTable([
-      ['Year', 'Numbers of hiring', 'Expenses'],
-      ['2004', 1000, 400]
+
+      ['Year', 'NbWomen'],
+      [<?php
+        if (isset($years)) {
+          foreach ($years as $year) {
+            echo $year;
+
+          }
+        }
+        ?>,
+        <?php
+        if (isset($women)) {
+          foreach ($women as $femme) {
+            echo $femme;
+          }
+        }
+        ?>
+      ],
+
     ]);
 
     var options = {
-      title: 'Courbe annuelle du nombre de femme',
+      title: 'Nombre de femme engagé dans notre société',
       curveType: 'function',
       legend: {
         position: 'bottom'

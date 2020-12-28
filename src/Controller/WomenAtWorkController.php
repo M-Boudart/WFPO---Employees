@@ -27,10 +27,15 @@ class WomenAtWorkController extends AppController
     
         $cellWomenRatio = $this->cell('WomenRatio');
         $cellWomenCourbe = $this->cell("WomenCourbe");
+        $cellWomenData = $this->cell("WomenData");
+        
 
         $this->set(compact('cellWomenRatio'));
         $this->set(compact('cellWomenCourbe'));
+        $this->set(compact('cellWomenData'));
        
+       
+      
 
     }
 

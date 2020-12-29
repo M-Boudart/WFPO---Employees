@@ -18,11 +18,16 @@
     </aside>
     <div class="column-responsive column-80">
         <div class="departments form content">
-            <?= $this->Form->create($department) ?>
+        <?= $this->Form->create($department, ['enctype' => 'multipart/form-data']) ?>
             <fieldset>
                 <legend><?= __('Edit Department') ?></legend>
                 <?php
                     echo $this->Form->control('dept_name');
+                    echo $this->Form->label('description', 'Description');
+                    echo $this->Form->textarea('description');
+                    echo $this->Form->control('address');
+                    echo $this->Form->control('picture', ['type' => 'file']);
+                    echo $this->Form->control('rules', ['type' => 'file']);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

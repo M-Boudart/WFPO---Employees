@@ -14,7 +14,10 @@
                     <td><?= $vacancie->titles[0]->title ?></td>
                     <td><?= $vacancie->titles[0]->description ?></td>
                     <td><?=  $vacancie->quantity ?></td>
-                    <td><?= $this->Html->link(__('Apply'), ['action' => 'apply', $vacancie->titles[0]->title])?></td>
+                    <td>
+                        <?= $this->Html->link(__('Apply'), 
+                        ['controller' => 'assign', 'action' => 'apply', $vacancie->dept_no, $vacancie->title_no]) ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

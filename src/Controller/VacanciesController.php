@@ -11,6 +11,13 @@ namespace App\Controller;
  */
 class VacanciesController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event) {
+        parent::beforeFilter($event);
+        // pour tous les contrôleurs de notre application, rendre les actions
+        // index et view publiques, en ignorant la vérification d'authentification
+        $this->Authentication->addUnauthenticatedActions(['displayJobsOffers']);
+    }
+
     /**
      * Index method
      *
@@ -115,15 +122,5 @@ class VacanciesController extends AppController
         
         $this->set(compact('vacancies'));
         $this->set(compact('dept_no'));
-    }
-    /**
-     * Apply for a job
-     * 
-     * @param string $dept_no Department'id
-     * @return \Cake\Http\Response|null|void Redirects to apply.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function apply(string $dept_no) {
-        
     }
 }

@@ -21,8 +21,6 @@
                     ); ?>
                 </li>
             <?php endforeach; ?>
-                <li><?= $this->Html->link('logout', ['controller' => 'Employees', 'action' => 'logout']) ?></li>
-                <li><?= $this->Html->link('login', ['controller' => 'Employees', 'action' => 'login']) ?></li>
             <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Dropdown

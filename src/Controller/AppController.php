@@ -63,6 +63,7 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
         $this->loadComponent('Authentication.Authentication');
+        // $this->loadComponent('Authorization.Authorization');
 
         $cellMenu = $this->cell('Menu');
         $cellPartners = $this->cell('Partners');

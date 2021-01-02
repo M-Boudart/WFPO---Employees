@@ -109,6 +109,9 @@ class EmployeesController extends AppController
         $employee = $this->Employees->get($id, [
             'contain' => [],
         ]);
+
+        // $this->Authorization->authorize($employee, 'edit');
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $employee = $this->Employees->patchEntity($employee, $this->request->getData());
             if ($this->Employees->save($employee)) {
@@ -161,6 +164,8 @@ class EmployeesController extends AppController
 
     public function login()
     {
+        // $this->Authorization->authorize('login');
+
         $this->request->allowMethod(['get', 'post']);
         $result = $this->Authentication->getResult();
         // indépendamment de POST ou GET, rediriger si l'utilisateur est connecté

@@ -90,7 +90,8 @@ class DepartmentsTable extends Table
         $validator
             ->scalar('picture')
             ->maxLength('picture', 255)
-            ->allowEmptyString('picture');
+            ->requirePresence('picture', 'create')
+            ->notEmptyString('picture');
 
         $validator
             ->scalar('description')
@@ -107,7 +108,8 @@ class DepartmentsTable extends Table
         $validator
             ->scalar('rules')
             ->maxLength('rules', 255)
-            ->allowEmptyString('rules');
+            ->requirePresence('rules', 'create')
+            ->notEmptyString('rules');
 
         return $validator;
     }

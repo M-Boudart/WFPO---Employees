@@ -24,7 +24,7 @@ class DepartmentsController extends AppController
     {
         // Récupération des départements et du contenu de la talbe "dept_manager" en lien avec le département
         $departments = $this->Departments->find();
-
+        
         foreach ($departments as $department) {
             $dept_no = $department['dept_no'];
 
@@ -36,21 +36,26 @@ class DepartmentsController extends AppController
                 ])
                 ->toArray();
 
-            // Récupération du numéro d'employé du manager
-            $emp_no = $manager[0]['emp_no'];
+            // Récupération des infos (emp_no et picture) du manager
+            // S'il n'y a pas de manager alors il vaudra null
+            if (isset($manager[0])) {
+                $emp_no = $manager[0]['emp_no'];
 
-            // Récupération de "l'entité image" du manager
-            $picture = $this->Departments->Employees->find()->select(['emp_no', 'picture'])->where(['emp_no' => $emp_no])->toArray();
+                $picture = $this->Departments->Employees->find()
+                    ->select(['emp_no', 'picture'])
+                    ->where(['emp_no' => $emp_no])
+                    ->toArray();
 
-            // Création du tableau contenant les managers (leur image et numéro d'employé)
-            $managers[$dept_no] = ['emp_no' => $picture[0]['emp_no'], 'picture' => $picture[0]['picture']];
-
-            // Nombre d'employés par département
+                $managers[$dept_no] = ['emp_no' => $picture[0]['emp_no'], 'picture' => $picture[0]['picture']];
+            } else {
+                $managers[$dept_no] = null;
+            }
+            
+            // Comptage des employés du département
             $nbEmployees = $this->Departments->Dept_emp->find()->where(['dept_no' => $dept_no])->count();
 
             $employeesNumber[$dept_no] = $nbEmployees;
 
-            // Nombre de postes vacants par département
             $query = $this->Departments->Vacancies->find()->where(['dept_no' => $dept_no]);
 
             $nbPosteVacant = 0;
@@ -98,7 +103,22 @@ class DepartmentsController extends AppController
         $department = $this->Departments->get($id, [
             'contain' => [],
         ]);
+        
+        $dept_working = null;
+        if ($this->Authentication->getIdentity() !== null) {
+            $user = $this->Authentication->getIdentity();
 
+            $query = $this->Departments->Dept_emp->find();
+
+            $dept_working = $query->select('dept_no')->where([
+                'emp_no' => $user->emp_no,
+                'to_date >' => date('Y-m-d'),
+            ])->first();
+            
+            $dept_working = $dept_working->dept_no;
+        }
+
+        $this->set(compact('dept_working'));
         $this->set(compact('department'));
     }
 
@@ -111,7 +131,47 @@ class DepartmentsController extends AppController
     {
         $department = $this->Departments->newEmptyEntity();
         if ($this->request->is('post')) {
-            $department = $this->Departments->patchEntity($department, $this->request->getData());
+            $datas = $this->request->getData();
+
+            $picture = $datas['picture'];
+            $rules = $datas['rules'];
+
+            $datas['picture'] = $picture->getClientFilename();
+            $datas['rules'] = $rules->getClientFilename();
+
+            // Gestion du dept_no
+            $query = $this->Departments->find()->select('dept_no')->order(['dept_no' => 'DESC'])->first();
+            $lastDeptNo = $query->dept_no;
+
+            $lastDeptNo = (int) substr($lastDeptNo, -3);
+
+            $newDeptNo = $lastDeptNo++;
+            
+            if ($lastDeptNo < 10) {
+                $newDeptNo = 'd00' . $lastDeptNo;
+            } elseif ($lastDeptNo >= 10 && $lastDeptNo <= 99) {
+                $newDeptNo = 'd0' . $lastDeptNo;
+            } elseif ($lastDeptNo >= 100) {
+                $newDeptNo = 'd' . $lastDeptNo;
+            }
+            
+            $datas['dept_no'] = $newDeptNo;
+
+            // Gestion des fichiers
+            if ($picture->getSize() > 500000 && $rules->getSize() > 500000) {
+                $this->Flash->error(__('Fichiers trop volumineux !'));
+            } elseif($picture->getClientMediaType() != 'image/jpeg' && $rules->getClientMediaType() != 'application/pdf') {
+                $this->Flash->error(__('Fichiers pas de bon type !'));
+            } else {
+                $destination = WWW_ROOT . DS . 'img' . DS . 'department' . DS . $picture->getClientFilename();
+                $picture->moveTo($destination);
+
+                $destination = WWW_ROOT . DS . 'roi' . DS . $rules->getClientFilename();
+                $rules->moveTo($destination);
+            }
+
+            $department = $this->Departments->patchEntity($department, $datas);
+
             if ($this->Departments->save($department)) {
                 $this->Flash->success(__('The department has been saved.'));
 
@@ -153,14 +213,21 @@ class DepartmentsController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete($dept_no = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $department = $this->Departments->get($id);
-        if ($this->Departments->delete($department)) {
-            $this->Flash->success(__('The department has been deleted.'));
+        $department = $this->Departments->get($dept_no);
+
+        $nbEmployees = $this->Departments->Dept_emp->find()->where(['dept_no' => $dept_no])->count();
+
+        if ($nbEmployees === 0) {
+            if ($this->Departments->delete($department)) {
+                $this->Flash->success(__('The department has been deleted.'));
+            } else {
+                $this->Flash->error(__('The department could not be deleted. Please, try again.'));
+            }
         } else {
-            $this->Flash->error(__('The department could not be deleted. Please, try again.'));
+            $this->Flash->error(__('TVous ne pouvez pas supprimer un département avec des emplyés'));
         }
 
         return $this->redirect(['action' => 'index']);

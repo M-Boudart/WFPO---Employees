@@ -31,7 +31,7 @@ class DepartmentsController extends AppController
             // Récupération de l'entité du manager (c-a-d celui avec le champ "to_date" plus grand que la date actuelle)
             $manager = $this->Departments->Dept_manager->find()->select('emp_no')
                 ->where([
-                    'to_date >' => '2020/12/08',
+                    'to_date >' => date('Y-m-d'),
                     'dept_no' => $dept_no
                 ])
                 ->toArray();

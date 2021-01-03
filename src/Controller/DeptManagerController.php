@@ -102,4 +102,30 @@ class DeptManagerController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    /**
+     * Revoque un manager
+     *
+     * @param string $emp_no Le numéro d'employé du manager.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function revoke(string $emp_no) {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $query = $this->DeptManager->query();
+
+        $result = $query->update()
+            ->set(['to_date' => date('Y-m-d')])
+            ->where(['emp_no' => $emp_no])
+            ->execute();
+
+        if ($result) {
+            $this->Flash->success(__('The manager has been revoked'));
+        } else {
+            $this->Flash->error(__("The manager can't be revoked, try again later"));
+        }
+
+        return $this->redirect(['controller' => 'departments','action' => 'index']);
+    }
 }

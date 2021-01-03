@@ -110,7 +110,7 @@ class DeptManagerController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function revoke(string $emp_no) {
+    public function revoke(string $emp_no, $dept_no) {
         $this->request->allowMethod(['post', 'delete']);
 
         $query = $this->DeptManager->query();
@@ -126,6 +126,27 @@ class DeptManagerController extends AppController
             $this->Flash->error(__("The manager can't be revoked, try again later"));
         }
 
-        return $this->redirect(['controller' => 'departments','action' => 'index']);
+        return $this->redirect(['controller' => 'departments','action' => 'view', $dept_no]);
+    }
+
+    public function promote($emp_no, $dept_no) {
+        $query = $this->DeptManager->query();
+
+        $result = $query->insert(['emp_no', 'dept_no', 'from_date', 'to_date'])
+            ->values([
+                'emp_no' => $emp_no,
+                'dept_no' => $dept_no,
+                'from_date' => date('Y-m-d'),
+                'to_date' => '9999-01-01'
+            ])
+            ->execute();
+
+        if ($result) {
+            $this->Flash->success("L'employé a été promu");
+        } else {
+            $this->Flash->error("L'employé ne peut être promu pour le moment");
+        }
+
+        return $this->redirect(['controller' => 'departments', 'action' => 'view', $dept_no]);
     }
 }

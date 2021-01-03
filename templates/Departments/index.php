@@ -18,10 +18,7 @@
                     <th><?= __('Manager') ?></th>
                     <th><?= __('Nb employees') ?></th>
                     <th><?= __('Postes à pourvoir') ?></th>
-                    <?php if (isset($user)) : ?>
-                        <th class="actions"><?= __('Actions') ?></th>
-                    <?php endif; ?>
-                    
+                    <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -54,20 +51,13 @@
                             ) ?>
                         <?php endif; ?>
                     </td>
-                    <?php if (isset($user)) :?>
                         <td class="actions">
                             <?= $this->Html->link(__('View'), ['action' => 'view', $department->dept_no]) ?>
-                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $department->dept_no]) ?>
-                            <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $department->dept_no], ['confirm' => __('Are you sure you want to delete # {0}?', $department->dept_no)]) ?>
-                            <?php if (isset($managers[$department->dept_no])) :?>
-                                <?= $this->Form->postLink(__('Revoke'), [
-                                    'controller' => 'deptManager',
-                                    'action' => 'revoke',
-                                    $managers[$department->dept_no]['emp_no'],
-                                ]) ?>
+                            <?php if (isset($user)) :?>
+                                <?= $this->Html->link(__('Edit'), ['action' => 'edit', $department->dept_no]) ?>
+                                <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $department->dept_no], ['confirm' => __('Are you sure you want to delete # {0}?', $department->dept_no)]) ?>
+                            </td>
                             <?php endif; ?>
-                        </td>
-                    <?php endif; ?>
                     <?php if (isset($dept_working) && $department->dept_no === $dept_working) : ?>
                         <td><?= $this->Html->link(__("Department's rules"), "/roi/$department->rules") ?></td>
                     <?php endif; ?>

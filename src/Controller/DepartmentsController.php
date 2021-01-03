@@ -103,6 +103,26 @@ class DepartmentsController extends AppController
         $department = $this->Departments->get($id, [
             'contain' => [],
         ]);
+
+        $employees = $this->Departments->Dept_emp->find()->where(['dept_no' => $id]);
+        $employees = $this->paginate($employees);
+
+        $managerNo = $this->Departments->Dept_manager->find()
+            ->select('emp_no')
+            ->where([
+                'dept_no' => $id,
+                'to_date >' => date('Y-m-d'),
+            ])
+            ->first();
+            
+        if (isset($managerNo)) {
+            $managerNo = $managerNo->emp_no;
+
+            $manager = $this->Departments->Employees->find()->where(['emp_no' => $managerNo])->toArray();
+        } else {
+            $manager = null;
+        }
+        
         
         $dept_working = null;
         if ($this->Authentication->getIdentity() !== null) {
@@ -120,6 +140,8 @@ class DepartmentsController extends AppController
 
         $this->set(compact('dept_working'));
         $this->set(compact('department'));
+        $this->set(compact('employees'));
+        $this->set(compact('manager'));
     }
 
     /**

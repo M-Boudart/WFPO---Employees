@@ -36,6 +36,64 @@
                     <?php endif; ?>
                 </div>
             </div>
+            <?php if (isset($manager)) : ?>
+                <div>
+                    <?= $this->Html->image('employees/' . $manager[0]['picture'], [
+                        'alt' => $manager[0]['emp_no'],
+                        'width' => 60,
+                        'height' => 60,
+                    ]) ?>
+                    <p><?= strtoupper($manager[0]['last_name']) . ' ' . $manager[0]['first_name']?>
+                    <?php if ($user) : ?>
+                        <?= $this->Form->postLink(__('Revoke'), [
+                            'controller' => 'deptManager',
+                            'action' => 'revoke',
+                            $manager[0]['emp_no'],$department->dept_no,
+                        ],
+                        ['confirm' => __('Etes vous sûr de vouloir révoquer ce maanger')]) ?>
+                    <?php endif; ?>
+
+                </div>
+            <?php endif; ?>
+            <?php if ($user) : ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th><?= __('emp_no') ?>
+                            <th><?= __('from_date') ?>
+                            <?php if (!isset($manager)) :?>
+                                <th><?= __('Promouvoir') ?></th>
+                            <?php endif; ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($employees as $employee) : ?>
+                            <tr>
+                                <td><?= $employee->emp_no ?></td>
+                                <td><?= $employee->from_date ?></td>
+                                <?php if (!isset($manager)) : ?>
+                                    <td><?= $this->Html->link(__('Promouvoir'), [
+                                        'controller' => 'deptManager',
+                                        'action' => 'promote',
+                                        $employee->emp_no, $department->dept_no
+                                    ],
+                                    ['confirm' => 'Etes vous sûr de voulir promouvoir cet employé en manager']) ?></td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <div class="paginator">
+                <ul class="pagination">
+                    <?= $this->Paginator->first('<< ' . __('first')) ?>
+                    <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next(__('next') . ' >') ?>
+                    <?= $this->Paginator->last(__('last') . ' >>') ?>
+                </ul>
+                <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

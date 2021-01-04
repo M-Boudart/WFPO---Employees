@@ -44,24 +44,47 @@ class EmployeesTable extends Table
         $this->setDisplayField('emp_no');
         $this->setPrimaryKey('emp_no');
         
-        $this->hasMany('salaries', [
+        $this->hasMany('Salaries', [
+            'joinTable' => 'salaries',
             'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
         ]);
         
-        $this->hasMany('titles', [
+        $this->hasMany('Employee_title', [
+            'joinTable' => 'employee_title',
             'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
         ]);
         
-        // Table departments
-        $this->belongsToMany('Departments',[
+        $this->hasMany('Dept_emp',[
             'joinTable' => 'dept_emp',
             'foreignKey' => 'emp_no',
             'bindingKey' => 'emp_no',
         ]);
 
-        // Table Employees
-        $this->belongsTo('Dept_mananger')
-            ->setForeignKey('emp_no');
+        $this->belongsTo('Dept_manager',[
+            'joinTable' => 'dept_manager',
+            'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
+        ]);
+
+        $this->hasMany('Demands',[
+            'joinTable' => 'demands',
+            'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
+        ]);
+
+        $this->belongsTo('Departments', [
+            'joinTable' => 'departments',
+            'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
+        ]);
+
+        $this->belongsToMany('Titles', [
+            'joinTable' => 'title',
+            'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
+        ]);
     }
 
     /**

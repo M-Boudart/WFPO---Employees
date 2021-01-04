@@ -20,7 +20,7 @@ class EmployeesController extends AppController
         parent::beforeFilter($event);
         // Configurez l'action de connexion pour ne pas exiger d'authentification,
         // évitant ainsi le problème de la boucle de redirection infinie
-        $this->Authentication->addUnauthenticatedActions(['login', 'add', 'edit']);
+        $this->Authentication->addUnauthenticatedActions(['login', 'add', 'edit', 'delete']);
     }
 
     /**
@@ -50,24 +50,44 @@ class EmployeesController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view($emp_no)
     {
-        $employee = $this->Employees->get($id, [
-            // 'contain' => ['salaries','titles'],
-        ]);
+        $employee = $this->Employees->get($emp_no);
         
-        // $titles = $employee->titles;
-        // $today = new \DateTime();
-        // foreach($titles as $title) {
-        //     $date = new \DateTime($title->to_date->format('Y-m-d'));
-            
-        //     if($date > $today) {
-        //         $employee->fonction = $title->title;
-        //         break;
-        //     }
-        // }
+        $salary = $this->Employees->Salaries->find()
+            ->select('salary')
+            ->where([
+                'emp_no' => $emp_no,
+                'to_date >' => date('Y-m-d'),
+            ])
+            ->first();
+        
+        $department = $this->Employees->Dept_emp->find()
+            ->select('dept_no')
+            ->where([
+                'emp_no' => $emp_no,
+                'to_date >' => date('Y-m-d'),
+            ])
+            ->first();
 
+        $titleNo = $this->Employees->Employee_title->find()
+        ->select('title_no')
+        ->where([
+            'emp_no' => $emp_no,
+            'to_date >' => date('Y-m-d'),
+        ])
+        ->first();
+        $titleNo = $titleNo->title_no;
+
+        $title = $this->Employees->Titles->find()
+            ->select('title')
+            ->where(['title_no' => $titleNo])
+            ->first();
+        
         $this->set(compact('employee'));
+        $this->set(compact('salary'));
+        $this->set(compact('department'));
+        $this->set(compact('title'));
     }
 
     /**
@@ -77,24 +97,73 @@ class EmployeesController extends AppController
      */
     public function add()
     {
-        //Récupérer => Créer
+        
         $employee = $this->Employees->newEmptyEntity();
         
-        //Traitement
-        //Rien faire en GET
-        //Persister en POST
         if ($this->request->is('post')) {
-            $employee = $this->Employees->patchEntity($employee, $this->request->getData());
-            if ($this->Employees->save($employee)) {
-                $this->Flash->success(__('The employee has been saved.'));
+            // Gestion de l'ajout de l'employé
+            $datas = $this->request->getData();
 
-                return $this->redirect(['action' => 'index']);
+            if ($datas['birth_date'] < date('Y-m-d')) {
+                $datas['hire_date'] = date('Y-m-d');
+
+                $picture = $datas['picture'];
+
+                $datas['picture'] = $picture->getClientFilename();
+
+                $lastEmpNo = $this->Employees->find()->select('emp_no')->order(['emp_no' => 'DESC'])->first();
+                $lastEmpNo = $lastEmpNo->emp_no;
+                $lastEmpNo += 1;
+
+                $datas['emp_no'] = $lastEmpNo;
+                
+                if ($picture->getSize() > 500000) {
+                    $this->Flash->error(__('Fichiers trop volumineux !'));
+                } elseif($picture->getClientMediaType() != 'image/jpeg') {
+                    $this->Flash->error(__('Fichiers pas de bon type !'));
+                } else {
+                    $destination = WWW_ROOT . DS . 'img' . DS . 'employees' . DS . $picture->getClientFilename();
+                    $picture->moveTo($destination);
+                }
+
+                $employee = $this->Employees->patchEntity($employee, $datas);
+
+                if ($this->Employees->save($employee)) {
+                    $query = $this->Employees->Dept_emp->query();
+                    $result = $query->insert(['emp_no', 'dept_no', 'from_date', 'to_date'])
+                                    ->values([
+                                        'emp_no' => $lastEmpNo,
+                                        'dept_no' => $datas['department'],
+                                        'from_date' => date('Y-m-d'),
+                                        'to_date' => '9999-01-01',
+                                    ])
+                                    ->execute();
+                    
+                    if ($result) {
+                        $this->Flash->success(__('The employee has been saved.'));
+
+                        return $this->redirect(['action' => 'index']);
+                    } else {
+                        $this->Flash->error(__('The employee could not be saved. Please, try again.'));
+                    }
+                } else {
+                    $this->Flash->error(__('The employee could not be saved. Please, try again.'));
+                }
+            } else {
+                $this->Flash->error(__("Vous ne pouvez pas être né plustard que la date d'aujourd'hui"));
             }
-            $this->Flash->error(__('The employee could not be saved. Please, try again.'));
         }
+
+        $queryDepartments = $this->Employees->Departments->find()->select('dept_no')->order(['dept_no' => 'ASC']);
         
-        //Envoyer vers la vue
+        $departments = [];
+        foreach($queryDepartments as $department) {
+            $key = $department->dept_no;
+            $departments[$key] = $department->dept_no;
+        }
+
         $this->set(compact('employee'));
+        $this->set(compact('departments'));
     }
 
     /**
@@ -113,7 +182,23 @@ class EmployeesController extends AppController
         // $this->Authorization->authorize($employee, 'edit');
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $employee = $this->Employees->patchEntity($employee, $this->request->getData());
+            $datas = $this->request->getData();
+
+            $picture = $datas['picture'];
+
+            $datas['picture'] = $picture->getClientFilename();
+
+            if ($picture->getSize() > 500000) {
+                $this->Flash->error(__('Fichiers trop volumineux !'));
+            } elseif($picture->getClientMediaType() != 'image/jpeg') {
+                $this->Flash->error(__('Fichiers pas de bon type !'));
+            } else {
+                $destination = WWW_ROOT . DS . 'img' . DS . 'employees' . DS . $picture->getClientFilename();
+                $picture->moveTo($destination);
+            }
+
+            $employee = $this->Employees->patchEntity($employee, $datas);
+
             if ($this->Employees->save($employee)) {
                 $this->Flash->success(__('The employee has been saved.'));
 
@@ -131,14 +216,13 @@ class EmployeesController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete($emp_no = null)
     {
         //Sécurité
         $this->request->allowMethod(['post', 'delete']);
         
         //Récupérer
-        $employee = $this->Employees->get($id);
-        
+        $employee = $this->Employees->get($emp_no);
         //Traitement
         if ($this->Employees->delete($employee)) {
             $this->Flash->success(__('The employee has been deleted.'));
@@ -146,7 +230,6 @@ class EmployeesController extends AppController
             $this->Flash->error(__('The employee could not be deleted. Please, try again.'));
         }
 
-        //Envoyer vers la vue: NON => Redirection
         return $this->redirect(['action' => 'index']);
     }
     

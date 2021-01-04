@@ -25,7 +25,6 @@ class DeptEmp extends Entity
      * @var array
      */
     protected $_accessible = [
-        'from_date' => true,
-        'to_date' => true,
+        '*' => true,
     ];
 }

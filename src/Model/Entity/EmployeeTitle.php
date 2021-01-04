@@ -6,15 +6,14 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Title Entity
+ * EmployeeTitle Entity
  *
+ * @property int $emp_no
  * @property int $title_no
- * @property string $title
- * @property string $description
- *
- * @property \App\Model\Entity\Employee $employee
+ * @property \Cake\I18n\FrozenDate $from_date
+ * @property \Cake\I18n\FrozenDate|null $to_date
  */
-class Title extends Entity
+class EmployeeTitle extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -26,6 +25,6 @@ class Title extends Entity
      * @var array
      */
     protected $_accessible = [
-        '*' => true,
+        'to_date' => true,
     ];
 }

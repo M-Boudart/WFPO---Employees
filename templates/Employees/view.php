@@ -6,13 +6,15 @@
 ?>
 <div class="row">
     <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit Employee'), ['action' => 'edit', $employee->emp_no], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete Employee'), ['action' => 'delete', $employee->emp_no], ['confirm' => __('Are you sure you want to delete # {0}?', $employee->emp_no), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('List Employees'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('New Employee'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
-        </div>
+        <?php if ($user) : ?>
+            <div class="side-nav">
+                <h4 class="heading"><?= __('Actions') ?></h4>
+                <?= $this->Html->link(__('Edit Employee'), ['action' => 'edit', $employee->emp_no], ['class' => 'side-nav-item']) ?>
+                <?= $this->Form->postLink(__('Delete Employee'), ['action' => 'delete', $employee->emp_no], ['confirm' => __('Are you sure you want to delete # {0}?', $employee->emp_no), 'class' => 'side-nav-item']) ?>
+                <?= $this->Html->link(__('List Employees'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+                <?= $this->Html->link(__('New Employee'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
+            </div>
+        <?php endif; ?>
     </aside>
     <div class="column-responsive column-80">
         <div class="employees view content">
@@ -44,18 +46,11 @@
                 </tr>
                 <tr>
                     <th><?= __('Function') ?></th>
-                    <td><?= h($employee->fonction) ?></td>
+                    <td><?= h($department->dept_no . ' : ' . $title->title) ?></td>
                 </tr>
                 <tr>
-                    <td colspan="2">
-                        <ul>
-                        <?php foreach($employee->salaries as $salary) : ?>
-                            <li><?= $this->Number->currency($salary->salary,"EUR",[
-                                'locale' => 'FR_fr'
-                            ]) ?></li>
-                        <?php endforeach; ?>
-                        </ul>
-                    </td>
+                    <th><?= __('Salary') ?></th>
+                    <td><?= $this->Number->currency($salary->salary, 'EUR'); ?></td>
                 </tr>
             </table>
         </div>

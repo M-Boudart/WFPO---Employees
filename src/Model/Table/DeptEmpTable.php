@@ -49,6 +49,12 @@ class DeptEmpTable extends Table
                 'to_date >' => date('Y-m-d'),
             ],
         ]);
+
+        $this->hasMany('Employees', [
+            'joinTable' => 'employees',
+            'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
+        ]);
     }
 
     /**

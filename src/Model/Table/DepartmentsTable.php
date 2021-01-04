@@ -41,7 +41,7 @@ class DepartmentsTable extends Table
         $this->setDisplayField('dept_no');
         $this->setPrimaryKey('dept_no');
         
-        $this->belongsToMany('Employees',[
+        $this->belongsToMany('Dept_emp',[
             'joinTable' => 'dept_emp',
             'foreignKey' => 'dept_no',
             'bindingKey' => 'dept_no',
@@ -64,6 +64,12 @@ class DepartmentsTable extends Table
             'joinTable' => 'vacancies',
             'foreignKey' => 'dept_no',
             'bindingKey' => 'dept_no',
+        ]);
+
+        $this->belongsTo('Employees', [
+            'joinTable' => 'employees',
+            'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
         ]);
     }
 

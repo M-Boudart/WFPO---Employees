@@ -46,6 +46,18 @@ class TitlesTable extends Table
             'foreignKey' => 'title_no',
             'bindingKey' => 'title_no',
         ]);
+
+        $this->belongsToMany('Employee_title', [
+            'joinTable' => 'employee_title',
+            'foreignKey' => 'title_no',
+            'bindingKey' => 'title_no',
+        ]);
+
+        $this->belongsToMany('Employees', [
+            'joinTable' => 'employees',
+            'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
+        ]);
     }
 
     /**

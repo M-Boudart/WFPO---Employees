@@ -40,6 +40,12 @@ class SalariesTable extends Table
         $this->setTable('salaries');
         $this->setDisplayField('emp_no');
         $this->setPrimaryKey(['emp_no', 'from_date']);
+
+        $this->hasMany('Employees', [
+            'joinTable' => 'employees',
+            'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
+        ]);
     }
 
     /**

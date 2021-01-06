@@ -110,7 +110,7 @@ class DeptManagerController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function revoke(string $emp_no, $dept_no) {
+    public function revoke(string $emp_no, $dept_no, $fromPromote = false) {
         $this->request->allowMethod(['post', 'delete']);
 
         $query = $this->DeptManager->query();

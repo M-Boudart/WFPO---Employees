@@ -43,6 +43,41 @@ class AppController extends Controller
     {
         parent::beforeRender($event);
         $user = $this->Authentication->getIdentity();
+        // $user = $this->Authentication->getResult()->getData();
+
+        // if ($user) {
+        //     $employeeTitleTable = $this->getTableLocator()->get('employee_title');
+        //     $titlesTables = $this->getTableLocator()->get('titles');
+        //     $deptEmpTable = $this->getTableLocator()->get('dept_emp');
+            
+        //     // Ajout du titre de l'utitlsateur connecté
+        //     $title = $employeeTitleTable->find()
+        //         ->where([
+        //             'emp_no' => $user->emp_no,
+        //             'to_date >' => date('Y-m-d'),
+        //         ])
+        //         ->first();
+
+        //     $title = $title->title_no;
+            
+        //     $titleName = $titlesTables->find()
+        //         ->where([
+        //             'title_no' => $title,
+        //         ])
+        //         ->first();
+
+        //     $user['title'] = $titleName->title;
+
+        //     // Ajout du départment de l'utilisateur connecté
+        //     $department = $deptEmpTable->find()
+        //         ->where([
+        //             'emp_no' => $user->emp_no,
+        //             'to_date >' => date('Y-m-d'),
+        //         ])
+        //         ->first();
+            
+        //     $user['dept_no'] = $department->dept_no;
+        // }
 
         $this->set(compact('user'));
     }

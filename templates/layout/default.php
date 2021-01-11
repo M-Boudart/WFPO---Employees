@@ -52,6 +52,7 @@ $cakeDescription = 'Projet Employees WFPO';
     <?php if(isset($user)) : ?>
         <p class="connection"><?= $this->Html->link('logout', ['controller' => 'Employees', 'action' => 'logout']) ?></p>
         <p class="connection"><?= $this->Html->link('demands', ['controller' => 'Demands', 'action' => 'index']) ?></p>
+        <p class="connection"><?= $this->Html->link('Titles', ['controller' => 'Titles', 'action' => 'index']) ?></p>
     <?php else : ?>
         <p class="connection"><?= $this->Html->link('login', ['controller' => 'Employees', 'action' => 'login']) ?></p>
     <?php endif; ?>

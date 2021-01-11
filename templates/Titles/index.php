@@ -8,7 +8,7 @@
     <?= $this->Html->link(__('New Title'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Titles') ?></h3>
     <div class="table-responsive">
-        <table>
+    <table>
             <thead>
                 <tr>
                     <th><?= $this->Paginator->sort('title_no') ?></th>
@@ -24,9 +24,9 @@
                     <td><?= h($title->title) ?></td>
                     <td><?= h($title->description) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $title->emp_no]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $title->emp_no]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $title->emp_no], ['confirm' => __('Are you sure you want to delete # {0}?', $title->emp_no)]) ?>
+                        <?= $this->Html->link(__('View'), ['action' => 'view', $title->title]) ?>
+                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $title->title]) ?>
+                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $title->title], ['confirm' => __('Are you sure you want to delete # {0}?', $title->title)]) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

@@ -48,9 +48,9 @@ class WomenAtWorkTable extends Table
             'foreignKey' => 'emp_no',
         ]);
         
-        $this->hasMany('titles', [
-            'foreignKey' => 'emp_no',
-        ]);
+        // $this->hasMany('titles', [
+        //     'foreignKey' => 'emp_no',
+        // ]);
         
         // Table departments
         $this->belongsToMany('Departments',[

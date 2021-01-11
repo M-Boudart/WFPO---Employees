@@ -12,7 +12,8 @@ use Cake\ORM\Entity;
  * @property string $title
  * @property string $description
  *
- * @property \App\Model\Entity\Employee $employee
+ * @property \App\Model\Entity\Vacancy[] $vacancies
+ * @property \App\Model\Entity\EmployeeTitle[] $employee_title
  */
 class Title extends Entity
 {
@@ -26,6 +27,9 @@ class Title extends Entity
      * @var array
      */
     protected $_accessible = [
-        '*' => true,
+        'title' => true,
+        'description' => true,
+        'vacancies' => true,
+        'employee_title' => true,
     ];
 }

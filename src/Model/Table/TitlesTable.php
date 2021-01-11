@@ -39,13 +39,7 @@ class TitlesTable extends Table
 
         $this->setTable('titles');
         $this->setDisplayField('title');
-        $this->setPrimaryKey(['emp_no', 'title', 'from_date']);
-
-        $this->hasMany('Vacancies', [
-            'joinTable' => 'vacancies',
-            'foreignKey' => 'title_no',
-            'bindingKey' => 'title_no',
-        ]);
+        $this->setPrimaryKey('title_no');
 
         $this->belongsToMany('Employee_title', [
             'joinTable' => 'employee_title',
@@ -53,10 +47,10 @@ class TitlesTable extends Table
             'bindingKey' => 'title_no',
         ]);
 
-        $this->belongsToMany('Employees', [
-            'joinTable' => 'employees',
-            'foreignKey' => 'emp_no',
-            'bindingKey' => 'emp_no',
+        $this->hasMany('Vacancies', [
+            'joinTable' => 'vacancies',
+            'foreignKey' => 'title_no',
+            'bindingKey' => 'title_no',
         ]);
     }
 

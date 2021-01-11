@@ -24,7 +24,6 @@ class DepartmentsController extends AppController
     {
         // Récupération des départements et du contenu de la talbe "dept_manager" en lien avec le département
         $departments = $this->Departments->find();
-        
         foreach ($departments as $department) {
             $dept_no = $department['dept_no'];
 
@@ -216,6 +215,8 @@ class DepartmentsController extends AppController
         $department = $this->Departments->get($id, [
             'contain' => [],
         ]);
+
+        dd($department);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $department = $this->Departments->patchEntity($department, $this->request->getData());
             if ($this->Departments->save($department)) {

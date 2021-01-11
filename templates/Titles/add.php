@@ -19,6 +19,7 @@
                 <?php
                     echo $this->Form->control('title_no');
                     echo $this->Form->control('description');
+                    echo $this->Form->control('employee_title._ids', ['options' => $employeeTitle]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

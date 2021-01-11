@@ -80,11 +80,11 @@ class EmployeesTable extends Table
             'bindingKey' => 'emp_no',
         ]);
 
-        // $this->belongsToMany('Titles', [
-        //     'joinTable' => 'title',
-        //     'foreignKey' => 'emp_no',
-        //     'bindingKey' => 'emp_no',
-        // ]);
+        $this->belongsToMany('Titles', [
+            'joinTable' => 'title',
+            'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
+        ]);
     }
 
     /**
